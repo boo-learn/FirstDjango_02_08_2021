@@ -1,20 +1,23 @@
 from django.http import Http404
 from django.shortcuts import render, HttpResponse
 
-
-ITEMS = (
-    {'id': 1, 'name': 'Некий товар номер 1'},
-    {'id': 2, 'name': 'Некий товар номер 2!!!'},
-    {'id': 3, 'name': 'Некий товар номер 3'},
-    {'id': 4, 'name': 'Некий товар номер 4'},
-    {'id': 5, 'name': 'Некий товар номер 5'},
-)
+ITEMS = [
+    {"id": 1, "name": "Кроссовки abibas", "quantity": 5},
+    {"id": 2, "name": "Куртка кожаная", "quantity": 2},
+    {"id": 3, "name": "Coca-cola 1 литр", "quantity": 12},
+    {"id": 4, "name": "Картофель фри", "quantity": 0},
+    {"id": 5, "name": "Кепка", "quantity": 124},
+]
 
 
 # Create your views here.
 def index(request):
-    name = 'Никитенко М.В.'
-    return HttpResponse(f'<h1>"Изучаем django"</h1><br><b>Автор</b>: <i>{name}</i>')
+    context = {
+        "name": "Евгений",
+        "surname": "Юрченко",
+        "hobbies": ["programming", "bike", "sleep"]
+    }
+    return render(request, "index.html", context)
 
 
 def about(request):
@@ -29,23 +32,15 @@ def about(request):
 
 
 def items(request):
-    items_str = "<ul>"
-    # <ul>
-    #     <li>Товар-1</li>
-    #     <li>Товар-2</li>
-    #     <li>Товар-3</li>
-    # </ul>
-    for item in ITEMS:
-        items_str += f"<li><a href='/item/{item['id']}'>{item['name']}</a></li>"
-    items_str += "</ul>"
-    return HttpResponse(items_str)
+    context = {"items": ITEMS}
+    return render(request, "items_list.html", context)
 
 
 def item_details(request, id):
     for item in ITEMS:
         if item['id'] == id:
-            return HttpResponse(f"""{item['name']}<br>""")
+            context = {
+                "item": item
+            }
+            return render(request, "item_page.html", context)
     raise Http404
-    # raise Http404   # По хорошему надо переопределять и использовать встроенный обработчик 404, но не сегодня,
-    # мы даже шаблоны сегодня ещё не используем, всему своё время
-    # return HttpResponse(f'Товар с id:{id} не найден<br><a href="/items">Назад к списку товаров</a>')
