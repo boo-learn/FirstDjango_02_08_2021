@@ -3,16 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Items</title>
+    <title>Item</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
 Список товаров:
 <ol>
     {% for item in items %}
-    <li class="item-card"><a href="/item/{{ item.id }}"> {{ item.name }}</a></li>
+<!--    <li class="item-card"><a href="/item/{{ item.id }}"> {{ item.name }}</a></li>-->
+    <li class="item-card"><a href="{% url 'item-page' item.id %}"> {{ item.name }}</a></li>
     {% endfor %}
 </ol>
-<a href="/">Home</a>
+<a href="{% url 'home' %}">Home</a>
+{% include 'inc/inc-footer.html' %}
 </body>
 </html>
